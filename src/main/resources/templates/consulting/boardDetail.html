@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<style>
+		
+		#rep_container{
+    width: 980px;
+    margin: 0 auto;
+    min-height: 630px;
+}
+		
+	</style>
+<th:block th:replace="~{./include/layout :: setContent(~{ :: #ct})}">
+  <div id="ct">
+    <div class="inner">
+      <div id="contents">
+        <h2 class="content-title">상담 보기</h2>
+        <div class="board-view-wrap">
+          <!-- 학생 상담 내용 -->
+          <table class="board-view">
+            <thead>
+              <th scope="col">
+                <p class="student-title">[[${consultingVO.title}]]</p>
+                <ul class="student-date">
+                  <li>대상: <span>[[${consultingVO.identity}]]</span></li>
+                  <li>조회수: [[${consultingVO.hit}]]</li>
+                  <li>등록일: [[${#temporals.format(consultingVO.regdate, 'yyyy-MM-dd')}]]</li>
+                </ul>
+              </th>
+            </thead>
+            <tbody>
+              <tr class="last">
+                <td class="student-comment"><textarea class="auto-height" disabled th:text="${consultingVO.content}"></textarea></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 현주언니 파트 -->
+          <table class="advice-reply" th:if="${replyVO == null}">
+			<div class="reply-btn">
+				<span class="btn-left">
+					<!--<button type="button" id="re_btn" onclick="replyForm">답변하기</button>--> 
+					<a th:href="@{/reply/writeReply(key = ${consultingVO.boardId})}" class="btn_reply" id="btn_reply">답변하기</a>
+				</span>
+			</div>
+          </table>
+          
+          
+          <table class="replyFinish" th:if="${replyVO != null}">
+			  <div class="reply_div">
+				<h3 class="reply_title_t">답변 보기</h3> 
+			  <thead>
+				  <th scope="col">
+					  <p class="teacher-reply-title">[[${replyVO.title}]]</p>
+					  <ul class="teacher-date">
+						  <li class="dddss">등록자: [[${replyVO.replyId}]]</li>
+    				      <li class="aaass">등록일: [[${#temporals.format(replyVO.regdate, 'yyyy-MM-dd')}]] </li>
+					  </ul>
+				  </th>
+			  </thead>
+			  <tbody>
+				  <tr class="reply-answer">
+					  <td class="teacher-answer" style="
+    height: 100px;
+">[[${replyVO.reply}]]</td>
+				  </tr>
+			  </tbody>
+			  </div>
+		  </table>
+          <!-- 현주언니 파트 끝 -->
+        </div>
+
+        <!-- 목록 보기 -->
+        <div class="board-view-btn">
+          <span class="btn-right">
+            <a th:href="@{/consulting/list}" class="btn-gray">목록보기</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
+
+<script th:inline="javascript">
+$(document).ready(function() {
+	$(".auto-height").each(function() {
+        $(this).height(this.scrollHeight);
+    });
+});
+</script>
